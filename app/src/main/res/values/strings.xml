@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Funny Flappy Jump Ball 2</string>
+    <string name="app_name">Super Color Picker Ultimate 1</string>
     <string name="play_button_text">Play!</string>
     <string name="game_over">Game Over!</string>
     <string name="score">Score: </string>
@@ -21,4 +21,6 @@
 
         Will you roll for another day?
     </string>
+    <string name="take_photo">Take photo</string>
+    <string name="cannot_take_photo">Cannot take the photo :(</string>
 </resources>
