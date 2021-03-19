@@ -23,7 +23,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import fr.m2dl.todo.supercolorpickerultimate1.engine.events.AccelerometerEvent
 import fr.m2dl.todo.supercolorpickerultimate1.engine.events.TouchScreenEvent
-import fr.m2dl.todo.supercolorpickerultimate1.gameobjects.PICTURE_RECEIVED_SIGNAL
 import fr.m2dl.todo.supercolorpickerultimate1.gameobjects.PICTURE_TAKEN_SIGNAL
 
 private const val REQUEST_IMAGE_CAPTURE = 1
@@ -52,7 +51,7 @@ class GameActivity : Activity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setupWindow()
         setupSensorManagerAndSensors()
-        gameView = GameView(this, savedInstanceState)
+        gameView = GameView(this)
         setContentView(R.layout.activity_game)
 
         val gameViewWrapper = findViewById<LinearLayout>(R.id.gameViewWrapper)
@@ -64,11 +63,6 @@ class GameActivity : Activity(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         destroyMediaPlayers()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        gameView.saveGameState(outState)
     }
 
     private fun setupWindow() {

@@ -116,7 +116,7 @@ class Picture: GameObject(), TouchScreenEventListener {
         width = newWidth
         height = newHeight
         initialX = viewport.width / 2f - width / 2f
-        initialY = viewport.height / 2f + MARGIN
+        initialY = viewport.height * (3f / 4f) - height / 2f + MARGIN
         moveTo(initialX, initialY)
     }
 
@@ -132,9 +132,10 @@ class Picture: GameObject(), TouchScreenEventListener {
     }
 
     private fun tryPutPictureInColorMatrixPart() {
+        previousPartWithPicture?.picture = null
+
         val part = findColorMatrixPartUnderPicture()
         if (part != null) {
-            previousPartWithPicture?.picture = null
             previousPartWithPicture = part
             part.picture = bitmap
         }

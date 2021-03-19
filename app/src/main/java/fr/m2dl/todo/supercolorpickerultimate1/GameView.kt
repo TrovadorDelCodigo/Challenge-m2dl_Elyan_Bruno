@@ -11,12 +11,13 @@ import fr.m2dl.todo.supercolorpickerultimate1.engine.impl.GameDrawingSurfaceImpl
 import fr.m2dl.todo.supercolorpickerultimate1.engine.impl.GameEngineImpl
 
 class GameView(
-    private val activity: Activity,
-    private val savedInstanceState: Bundle?
+    private val activity: Activity
 ) : SurfaceView(activity), SurfaceHolder.Callback {
 
     private val defaultFps = 60
     var gameEngine: GameEngine? = null
+
+    private var savedState: Bundle? = null
 
     private var score = 0
     private var nbParties = 0
@@ -34,6 +35,15 @@ class GameView(
         }
     }
 
+    private val gameOverSignalHandler: (Any) -> Unit = { score ->
+        if (score is Int) {
+            val intent = Intent(activity, GameOverActivity::class.java)
+            intent.putExtra("score", score)
+            activity.startActivity(intent)
+            activity.finish()
+        }
+    }
+
     init {
         holder.addCallback(this)
         isFocusable = true
@@ -48,6 +58,8 @@ class GameView(
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         var retry = true
+        savedState = Bundle()
+        gameEngine!!.saveState(savedState!!)
         while (retry) {
             try {
                 stopGame()
@@ -60,16 +72,12 @@ class GameView(
 
     private fun startGame() {
         gameEngine = GameEngineImpl(defaultFps, GameDrawingSurfaceImpl(this), activity.resources)
-        if (savedInstanceState != null) {
-            gameEngine!!.restoreState(savedInstanceState)
+        if (savedState != null) {
+            gameEngine!!.restoreState(savedState!!)
         }
         gameEngine!!.signalManager.subscribe("add-score-signal", scoreHandler)
         populateGameWorld()
         gameEngine?.start()
-    }
-
-    fun saveGameState(bundle: Bundle) {
-        gameEngine!!.saveState(bundle)
     }
 
     private fun stopGame() {

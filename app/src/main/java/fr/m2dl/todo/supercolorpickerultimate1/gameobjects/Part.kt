@@ -163,10 +163,17 @@ class Part(
     }
 
     override fun save(bundle: Bundle) {
-        picture = bundle.getParcelable("part-$id-picture")
+        bundle.putParcelable("part-$id-picture", picture)
+        bundle.putInt("part-$id-state", state.ordinal)
     }
 
     override fun load(bundle: Bundle) {
-        bundle.putParcelable("part-$id-picture", picture)
+        picture = bundle.getParcelable("part-$id-picture")
+        state = when(bundle.getInt("part-$id-state")!!) {
+            PartState.EMPTY.ordinal -> PartState.EMPTY
+            PartState.PICTURE.ordinal -> PartState.PICTURE
+            PartState.PICTURE_LOCKED.ordinal -> PartState.PICTURE_LOCKED
+            else -> throw IllegalStateException("Unknown state")
+        }
     }
 }
