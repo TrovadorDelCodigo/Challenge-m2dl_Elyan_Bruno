@@ -2,6 +2,7 @@ package fr.m2dl.todo.supercolorpickerultimate1
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import fr.m2dl.todo.supercolorpickerultimate1.engine.GameEngine
@@ -10,7 +11,8 @@ import fr.m2dl.todo.supercolorpickerultimate1.engine.impl.GameDrawingSurfaceImpl
 import fr.m2dl.todo.supercolorpickerultimate1.engine.impl.GameEngineImpl
 
 class GameView(
-    private val activity: Activity
+    private val activity: Activity,
+    private val savedInstanceState: Bundle?
 ) : SurfaceView(activity), SurfaceHolder.Callback {
 
     private val defaultFps = 60
@@ -51,9 +53,16 @@ class GameView(
 
     private fun startGame() {
         gameEngine = GameEngineImpl(defaultFps, GameDrawingSurfaceImpl(this), activity.resources)
+        if (savedInstanceState != null) {
+            gameEngine!!.restoreState(savedInstanceState)
+        }
         gameEngine!!.signalManager.subscribe("game-over", gameOverSignalHandler)
         populateGameWorld()
         gameEngine?.start()
+    }
+
+    fun saveGameState(bundle: Bundle) {
+        gameEngine!!.saveState(bundle)
     }
 
     private fun stopGame() {

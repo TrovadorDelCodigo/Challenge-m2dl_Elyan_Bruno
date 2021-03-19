@@ -17,10 +17,14 @@ class SignalManagerImpl: SignalManager {
         handlers[signalName]?.remove(signalHandler)
     }
 
-    override fun sendSignal(signalName: String, signalData: Any) {
+    override fun sendSignal(signalName: String, signalData: Any): Int {
+        var nbReceived = 0
         // TODO Optimize it. Don't create iterators...
         handlers[signalName]?.forEach {
+            nbReceived++
             it(signalData)
         }
+
+        return nbReceived
     }
 }

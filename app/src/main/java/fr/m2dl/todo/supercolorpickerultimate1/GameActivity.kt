@@ -23,6 +23,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import fr.m2dl.todo.supercolorpickerultimate1.engine.events.AccelerometerEvent
 import fr.m2dl.todo.supercolorpickerultimate1.engine.events.TouchScreenEvent
+import fr.m2dl.todo.supercolorpickerultimate1.gameobjects.PICTURE_RECEIVED_SIGNAL
 import fr.m2dl.todo.supercolorpickerultimate1.gameobjects.PICTURE_TAKEN_SIGNAL
 
 private const val REQUEST_IMAGE_CAPTURE = 1
@@ -36,11 +37,22 @@ class GameActivity : Activity(), SensorEventListener {
     private val mediaPlayers = mutableListOf<MediaPlayer>()
     private val startMusicHandler = Handler(Looper.getMainLooper())
 
+    private lateinit var picture: Bitmap
+    private val transmitPictureHandler = Handler(Looper.getMainLooper())
+    private val sendPicture = object : Runnable {
+        override fun run() {
+            val nbReceived = gameView.gameEngine?.signalManager?.sendSignal(PICTURE_TAKEN_SIGNAL, picture)
+            if (nbReceived == 0) {
+                transmitPictureHandler.postDelayed(this, 50)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupWindow()
         setupSensorManagerAndSensors()
-        gameView = GameView(this)
+        gameView = GameView(this, savedInstanceState)
         setContentView(R.layout.activity_game)
 
         val gameViewWrapper = findViewById<LinearLayout>(R.id.gameViewWrapper)
@@ -52,6 +64,11 @@ class GameActivity : Activity(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         destroyMediaPlayers()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        gameView.saveGameState(outState)
     }
 
     private fun setupWindow() {
@@ -106,8 +123,8 @@ class GameActivity : Activity(), SensorEventListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val picture = data!!.extras!!.get("data") as Bitmap
-            gameView.gameEngine?.signalManager?.sendSignal(PICTURE_TAKEN_SIGNAL, picture)
+            picture = data!!.extras!!.get("data") as Bitmap
+            transmitPictureHandler.postDelayed(sendPicture, 50)
         }
     }
 }
