@@ -14,7 +14,7 @@ class GameView(
 ) : SurfaceView(activity), SurfaceHolder.Callback {
 
     private val defaultFps = 60
-    private var gameEngine: GameEngine? = null
+    var gameEngine: GameEngine? = null
 
     private val gameOverSignalHandler: (Any) -> Unit = { score ->
         if (score is Int) {
