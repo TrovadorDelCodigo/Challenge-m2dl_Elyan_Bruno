@@ -7,18 +7,16 @@ import fr.m2dl.todo.supercolorpickerultimate1.engine.gameobjects.GameObject
 
 class Scene: GameObject() {
     private val paint = Paint().also { it.color = Color.MAGENTA }
+
     override fun init() {
+        addChild(ColorMatrix())
     }
 
-    override fun deinit() {
-    }
+    override fun deinit() { }
 
-    override fun update(delta: Long) {
-    }
+    override fun update(delta: Long) { }
 
-    override fun draw(canvas: Canvas) {
-        canvas.drawCircle(100f, 100f,  50f, paint)
-    }
+    override fun draw(canvas: Canvas) { }
 
 }
 
