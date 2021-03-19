@@ -9,6 +9,7 @@ class GameDrawingSurfaceImpl(
         private  val surfaceView: SurfaceView
 ): GameDrawingSurface {
 
+    // TODO Use canvas size !
     override val viewport = GameViewport(surfaceView.width.toFloat(), surfaceView.height.toFloat())
 
     override fun lockAndGetCanvas(): Canvas? =

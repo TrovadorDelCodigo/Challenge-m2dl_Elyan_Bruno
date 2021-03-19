@@ -2,6 +2,7 @@ package fr.m2dl.todo.supercolorpickerultimate1.engine.impl
 
 import android.graphics.Canvas
 import android.content.res.Resources
+import android.os.Bundle
 import fr.m2dl.todo.supercolorpickerultimate1.engine.*
 import fr.m2dl.todo.supercolorpickerultimate1.engine.events.*
 import fr.m2dl.todo.supercolorpickerultimate1.engine.gameobjects.CollidableGameObject
@@ -18,6 +19,8 @@ class GameEngineImpl(
         get() = gameDrawingSurface.viewport
 
     override val signalManager = SignalManagerImpl()
+
+    private var savedInstanceState: Bundle? = null
 
     private lateinit var gameEngineThread: GameEngineThread
 
@@ -64,6 +67,9 @@ class GameEngineImpl(
             gameObject.initInternals(this, viewport)
         }
         gameObject.init()
+        if (savedInstanceState != null && gameObject is Saveable) {
+            gameObject.load(savedInstanceState!!)
+        }
     }
 
     override fun deinitGameObject(gameObject: GameObject) {
@@ -89,6 +95,23 @@ class GameEngineImpl(
         gameObject.draw(canvas)
         gameObject.children.forEachOptimized {
             drawGameObject(it, canvas)
+        }
+    }
+
+    override fun restoreState(bundle: Bundle) {
+        savedInstanceState = bundle
+    }
+
+    override fun saveState(bundle: Bundle) {
+        saveGameObjectStates(gameObjectTree!!, bundle)
+    }
+
+    private fun saveGameObjectStates(gameObject: GameObject, bundle: Bundle) {
+        if (gameObject is Saveable) {
+            gameObject.save(bundle)
+        }
+        gameObject.children.forEachOptimized {
+            saveGameObjectStates(it, bundle)
         }
     }
 

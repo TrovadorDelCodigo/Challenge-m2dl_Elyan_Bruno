@@ -2,6 +2,7 @@ package fr.m2dl.todo.supercolorpickerultimate1
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import fr.m2dl.todo.supercolorpickerultimate1.engine.GameEngine
@@ -15,6 +16,24 @@ class GameView(
 
     private val defaultFps = 60
     var gameEngine: GameEngine? = null
+
+    private var savedState: Bundle? = null
+
+    private var score = 0
+    private var nbParties = 0
+
+    private val scoreHandler: (Any) -> Unit = { partScore ->
+        if (partScore is Int) {
+            score += partScore
+            nbParties += 1
+            if (nbParties == 9) {
+                val intent = Intent(activity, GameOverActivity::class.java)
+                intent.putExtra("score", score)
+                activity.startActivity(intent)
+                activity.finish()
+            }
+        }
+    }
 
     private val gameOverSignalHandler: (Any) -> Unit = { score ->
         if (score is Int) {
@@ -39,6 +58,8 @@ class GameView(
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         var retry = true
+        savedState = Bundle()
+        gameEngine!!.saveState(savedState!!)
         while (retry) {
             try {
                 stopGame()
@@ -51,7 +72,10 @@ class GameView(
 
     private fun startGame() {
         gameEngine = GameEngineImpl(defaultFps, GameDrawingSurfaceImpl(this), activity.resources)
-        gameEngine!!.signalManager.subscribe("game-over", gameOverSignalHandler)
+        if (savedState != null) {
+            gameEngine!!.restoreState(savedState!!)
+        }
+        gameEngine!!.signalManager.subscribe("add-score-signal", scoreHandler)
         populateGameWorld()
         gameEngine?.start()
     }

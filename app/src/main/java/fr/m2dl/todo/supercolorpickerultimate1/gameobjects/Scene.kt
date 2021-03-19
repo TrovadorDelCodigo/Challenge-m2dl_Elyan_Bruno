@@ -6,20 +6,19 @@ import android.graphics.Paint
 import fr.m2dl.todo.supercolorpickerultimate1.engine.gameobjects.GameObject
 
 class Scene: GameObject() {
-    private val paint = Paint().also { it.color = Color.BLACK }
+
+    private val paint = Paint().also { it.color = Color.rgb(245,245,245) }
 
     override fun init() {
+        addChild(ColorMatrix())
         addChild(Picture())
     }
 
-    override fun deinit() {
-    }
+    override fun deinit() { }
 
-    override fun update(delta: Long) {
-    }
+    override fun update(delta: Long) { }
 
     override fun draw(canvas: Canvas) {
         canvas.drawRect(0f, 0f, viewport.width, viewport.height, paint)
-        canvas.drawCircle(100f, 100f,  50f, paint)
     }
 }
