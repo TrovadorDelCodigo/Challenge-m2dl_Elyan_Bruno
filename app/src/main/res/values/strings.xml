@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Funny Flappy Jump Ball 2</string>
+    <string name="play_button_text">Play!</string>
+    <string name="game_over">Game Over!</string>
+    <string name="score">Score: </string>
+    <string name="register_score">Register score?</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">Ok</string>
+    <string name="register_score_button_text">Register Score</string>
+    <string name="story">
+        When nuclear bombs dropped, the world froze. Life is now dead so humans cannot maintain roads
+        anymore. Holes are now forming and walls were projected by nuclear blasts.
+        <br/>
+        <br/>
+
+        You are The Ball.
+        The only thing still moving as you never stopped rolling since that day. You are in a
+        forever motion chasing a future that wont be anymore.
+        <br/>
+        <br/>
+
+        Will you roll for another day?
+    </string>
+</resources>

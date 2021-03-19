@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "696251328115",
+    "project_id": "super-color-picker-ultimate-1",
+    "storage_bucket": "super-color-picker-ultimate-1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696251328115:android:ff228f52c158ea5a806c06",
+        "android_client_info": {
+          "package_name": "fr.m2dl.todo.supercolorpickerultimate1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "696251328115-ktn6oe1mg0c89le2d259rs76nl62h2ku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtMmPFTJhpIFPpUzL-eYxEGdhsM4bGqAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "696251328115-ktn6oe1mg0c89le2d259rs76nl62h2ku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
