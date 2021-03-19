@@ -28,6 +28,8 @@ enum class PartState {
     PICTURE_LOCKED
 }
 
+private const val SEND_SCORE_SIGNAL = "add-score-signal"
+
 class Part(
     val id: Int,
     x: Float,
@@ -60,6 +62,7 @@ class Part(
     override fun deinit() { }
 
     override fun update(delta: Long) {
+        signalManager.sendSignal(SEND_SCORE_SIGNAL, getScore())
     }
 
     override fun draw(canvas: Canvas) {
@@ -97,21 +100,22 @@ class Part(
         blueBucket / pixelCount);
     }
 
-    fun getScore(): Int {
+    private fun getScore(): Int {
         val pictureDominantColor = getDominantColor(picture)
         val absDiffRed = abs(color.red - pictureDominantColor.red)
         val absDiffGreen = abs(color.green - pictureDominantColor.green)
         val absDiffBlue = abs(color.blue - pictureDominantColor.blue)
 
-        /** test
         println("${color.blue} > ${color.green} > ${color.red}")
         println("${pictureDominantColor.blue} < ${pictureDominantColor.green} < ${pictureDominantColor.red}")
         println("$absDiffBlue - $absDiffGreen - $absDiffRed")
-        */
         return when {
             absDiffBlue <= 10 && absDiffGreen <= 10 && absDiffRed <= 10 -> 200
             absDiffBlue <= 100 && absDiffGreen <= 100 && absDiffRed <= 100 -> 100
-            absDiffBlue <= 200 && absDiffGreen <= 200 && absDiffRed <= 200 -> 10
+            absDiffBlue <= 200 && absDiffGreen <= 200 && absDiffRed <= 200 -> 50
+            absDiffBlue <= 100 && absDiffGreen <= 100 || absDiffRed <= 100 -> 25
+            absDiffBlue <= 100 || absDiffGreen <= 100 && absDiffRed <= 100 -> 25
+            absDiffBlue <= 100 || absDiffGreen <= 100 || absDiffRed <= 100 -> 5
             else -> 0
         }
     }

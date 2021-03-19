@@ -18,12 +18,19 @@ class GameView(
     private val defaultFps = 60
     var gameEngine: GameEngine? = null
 
-    private val gameOverSignalHandler: (Any) -> Unit = { score ->
-        if (score is Int) {
-            val intent = Intent(activity, GameOverActivity::class.java)
-            intent.putExtra("score", score)
-            activity.startActivity(intent)
-            activity.finish()
+    private var score = 0
+    private var nbParties = 0
+
+    private val scoreHandler: (Any) -> Unit = { partScore ->
+        if (partScore is Int) {
+            score += partScore
+            nbParties += 1
+            if (nbParties == 9) {
+                val intent = Intent(activity, GameOverActivity::class.java)
+                intent.putExtra("score", score)
+                activity.startActivity(intent)
+                activity.finish()
+            }
         }
     }
 
@@ -56,7 +63,7 @@ class GameView(
         if (savedInstanceState != null) {
             gameEngine!!.restoreState(savedInstanceState)
         }
-        gameEngine!!.signalManager.subscribe("game-over", gameOverSignalHandler)
+        gameEngine!!.signalManager.subscribe("add-score-signal", scoreHandler)
         populateGameWorld()
         gameEngine?.start()
     }

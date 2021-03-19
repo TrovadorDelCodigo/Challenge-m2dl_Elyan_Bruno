@@ -7,7 +7,7 @@ import fr.m2dl.todo.supercolorpickerultimate1.engine.gameobjects.GameObject
 
 class Scene: GameObject() {
 
-    private val paint = Paint().also { it.color = Color.BLACK }
+    private val paint = Paint().also { it.color = Color.rgb(245,245,245) }
 
     override fun init() {
         addChild(ColorMatrix())
