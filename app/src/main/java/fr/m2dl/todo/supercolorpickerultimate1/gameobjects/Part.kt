@@ -35,12 +35,12 @@ class Part(
     x: Float,
     y: Float,
     var size: Float,
-    val color: Int
+    var color: Int
 ) : GameObject(x, y), AccelerometerEventListener, Saveable {
 
     private var state = PartState.EMPTY
 
-    private val paint = Paint().also { it.color = color }
+    private val paint = Paint()
 
     var picture: Bitmap? = null
         set(value) {
@@ -66,6 +66,7 @@ class Part(
     }
 
     override fun draw(canvas: Canvas) {
+        paint.color = color
         canvas.drawRect(globalX, globalY, globalX + size,
             globalY + size, paint)
 
@@ -165,6 +166,7 @@ class Part(
     override fun save(bundle: Bundle) {
         bundle.putParcelable("part-$id-picture", picture)
         bundle.putInt("part-$id-state", state.ordinal)
+        bundle.putInt("part-$id-color", color)
     }
 
     override fun load(bundle: Bundle) {
@@ -175,5 +177,6 @@ class Part(
             PartState.PICTURE_LOCKED.ordinal -> PartState.PICTURE_LOCKED
             else -> throw IllegalStateException("Unknown state")
         }
+        color = bundle.getInt("part-$id-color")!!
     }
 }
