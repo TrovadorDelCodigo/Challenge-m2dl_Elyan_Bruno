@@ -1,9 +1,6 @@
 package fr.m2dl.todo.supercolorpickerultimate1.gameobjects
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
@@ -14,6 +11,7 @@ import fr.m2dl.todo.supercolorpickerultimate1.engine.Saveable
 import fr.m2dl.todo.supercolorpickerultimate1.engine.events.AccelerometerEvent
 import fr.m2dl.todo.supercolorpickerultimate1.engine.gameobjects.GameObject
 import kotlin.math.abs
+import kotlin.math.min
 import kotlin.math.sqrt
 
 private const val PART_PICTURE_MARGIN = 4
@@ -41,6 +39,8 @@ class Part(
     private var state = PartState.EMPTY
 
     private val paint = Paint()
+    private val srcRect = Rect()
+    private val dstRect = Rect()
 
     var picture: Bitmap? = null
         set(value) {
@@ -62,7 +62,7 @@ class Part(
     override fun deinit() { }
 
     override fun update(delta: Long) {
-        signalManager.sendSignal(SEND_SCORE_SIGNAL, getScore())
+        // signalManager.sendSignal(SEND_SCORE_SIGNAL, getScore())
     }
 
     override fun draw(canvas: Canvas) {
@@ -71,7 +71,20 @@ class Part(
             globalY + size, paint)
 
         if (picture != null) {
-            canvas.drawBitmap(picture!!, globalX + PART_PICTURE_MARGIN, globalY + PART_PICTURE_MARGIN, paint)
+            srcRect.apply {
+                top = 0
+                left = 0
+                right = min(size.toInt() - 2 * PART_PICTURE_MARGIN, picture!!.width)
+                bottom = min(size.toInt() - 2 * PART_PICTURE_MARGIN, picture!!.height)
+            }
+            dstRect.apply {
+                top = (globalY + PART_PICTURE_MARGIN).toInt()
+                left = (globalX + PART_PICTURE_MARGIN).toInt()
+                right = (globalX + size - PART_PICTURE_MARGIN).toInt()
+                bottom = (globalY + size - PART_PICTURE_MARGIN).toInt()
+            }
+            paint.alpha = if (state == PartState.PICTURE_LOCKED) 255 else 70
+            canvas.drawBitmap(picture!!, srcRect, dstRect, paint)
         }
     }
 
