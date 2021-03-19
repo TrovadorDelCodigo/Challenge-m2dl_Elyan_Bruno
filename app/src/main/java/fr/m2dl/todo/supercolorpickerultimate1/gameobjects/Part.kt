@@ -36,11 +36,12 @@ class Part(
     var color: Int
 ) : GameObject(x, y), AccelerometerEventListener, Saveable {
 
-    private var state = PartState.EMPTY
+    var state = PartState.EMPTY
 
     private val paint = Paint()
     private val srcRect = Rect()
     private val dstRect = Rect()
+    private var scoreSent = false
 
     var picture: Bitmap? = null
         set(value) {
@@ -62,7 +63,11 @@ class Part(
     override fun deinit() { }
 
     override fun update(delta: Long) {
-        // signalManager.sendSignal(SEND_SCORE_SIGNAL, getScore())
+        if (state == PartState.PICTURE && !scoreSent) {
+            println("----------------------------------------------- send signal $id")
+            // signalManager.sendSignal(SEND_SCORE_SIGNAL, getScore())
+            // scoreSent = true
+        }
     }
 
     override fun draw(canvas: Canvas) {
@@ -173,6 +178,7 @@ class Part(
 
     private fun lockPicture() {
         println("Picture locked!")
+        signalManager.sendSignal(SEND_SCORE_SIGNAL, getScore())
         state = PartState.PICTURE_LOCKED
     }
 

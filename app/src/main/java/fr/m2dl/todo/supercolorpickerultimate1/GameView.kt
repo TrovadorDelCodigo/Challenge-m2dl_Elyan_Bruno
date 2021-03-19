@@ -9,11 +9,13 @@ import fr.m2dl.todo.supercolorpickerultimate1.engine.GameEngine
 import fr.m2dl.todo.supercolorpickerultimate1.engine.events.*
 import fr.m2dl.todo.supercolorpickerultimate1.engine.impl.GameDrawingSurfaceImpl
 import fr.m2dl.todo.supercolorpickerultimate1.engine.impl.GameEngineImpl
+import fr.m2dl.todo.supercolorpickerultimate1.gameobjects.Scene
 
 class GameView(
     private val activity: Activity
 ) : SurfaceView(activity), SurfaceHolder.Callback {
 
+    private lateinit var scene: Scene
     private val defaultFps = 60
     var gameEngine: GameEngine? = null
 
@@ -26,21 +28,13 @@ class GameView(
         if (partScore is Int) {
             score += partScore
             nbParties += 1
+            println("secoreHandler $nbParties")
             if (nbParties == 9) {
                 val intent = Intent(activity, GameOverActivity::class.java)
                 intent.putExtra("score", score)
                 activity.startActivity(intent)
                 activity.finish()
             }
-        }
-    }
-
-    private val gameOverSignalHandler: (Any) -> Unit = { score ->
-        if (score is Int) {
-            val intent = Intent(activity, GameOverActivity::class.java)
-            intent.putExtra("score", score)
-            activity.startActivity(intent)
-            activity.finish()
         }
     }
 
@@ -85,7 +79,8 @@ class GameView(
     }
 
     private fun populateGameWorld() {
-        gameEngine?.setSceneRoot(fr.m2dl.todo.supercolorpickerultimate1.gameobjects.Scene())
+        scene = fr.m2dl.todo.supercolorpickerultimate1.gameobjects.Scene()
+        gameEngine?.setSceneRoot(scene)
     }
 
     fun notifyEvent(event: GameInputEvent) {
