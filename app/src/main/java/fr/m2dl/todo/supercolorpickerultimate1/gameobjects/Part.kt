@@ -9,10 +9,8 @@ import androidx.core.graphics.green
 import androidx.core.graphics.red
 import android.hardware.SensorManager
 import android.os.Bundle
-import fr.m2dl.todo.supercolorpickerultimate1.R
 import fr.m2dl.todo.supercolorpickerultimate1.engine.AccelerometerEventListener
 import fr.m2dl.todo.supercolorpickerultimate1.engine.Saveable
-import fr.m2dl.todo.supercolorpickerultimate1.engine.cache.bitmap.BitmapCache
 import fr.m2dl.todo.supercolorpickerultimate1.engine.events.AccelerometerEvent
 import fr.m2dl.todo.supercolorpickerultimate1.engine.gameobjects.GameObject
 import kotlin.math.abs
@@ -57,9 +55,6 @@ class Part(
     private var shakeCount = 0
 
     override fun init() {
-       picture = BitmapCache.getCachedBitmap(size.toInt() - PART_PICTURE_MARGIN * 2,
-           size.toInt() - PART_PICTURE_MARGIN * 2,
-           resources, R.drawable.background01, true)
     }
 
     override fun deinit() { }
